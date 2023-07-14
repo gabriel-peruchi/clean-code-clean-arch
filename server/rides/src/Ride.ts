@@ -1,4 +1,4 @@
-import { Segment } from './Segment'
+import { Coordinates, Segment } from './Segment'
 
 export class Ride {
   segments: Segment[]
@@ -12,24 +12,25 @@ export class Ride {
     this.segments = []
   }
 
-  addSegment(distance: number, date: Date) {
-    this.segments.push(new Segment(distance, date))
+  addSegment(from: Coordinates, to: Coordinates, date: Date) {
+    this.segments.push(new Segment(from, to, date))
   }
 
   calculate() {
     let price = 0
     for (const segment of this.segments) {
+      const distance = segment.calculateDistance()
       if (segment.isOvernight() && !segment.isSunday()) {
-        price += segment.distance * this.OVERNIGHT_FARE
+        price += distance * this.OVERNIGHT_FARE
       }
       if (segment.isOvernight() && segment.isSunday()) {
-        price += segment.distance * this.OVERNIGHT_SUNDAY_FARE
+        price += distance * this.OVERNIGHT_SUNDAY_FARE
       }
       if (!segment.isOvernight() && segment.isSunday()) {
-        price += segment.distance * this.SUNDAY_FARE
+        price += distance * this.SUNDAY_FARE
       }
       if (!segment.isOvernight() && !segment.isSunday()) {
-        price += segment.distance * this.NORMAL_FARE
+        price += distance * this.NORMAL_FARE
       }
     }
     return (price < this.MIN_PRICE) ? this.MIN_PRICE : price

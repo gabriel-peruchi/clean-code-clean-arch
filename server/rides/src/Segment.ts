@@ -1,6 +1,9 @@
+import { calculate } from "./DistanceCalculator"
+
+export type Coordinates = [number, number]
+
 export class Segment {
-  constructor(readonly distance: number, readonly date: Date) {
-    if (!this.isValidDistance()) throw new Error('Invalid distance')
+  constructor(readonly from: Coordinates, readonly to: Coordinates, readonly date: Date) {
     if (!this.isValidDate()) throw new Error('Invalid date')
   }
 
@@ -12,11 +15,11 @@ export class Segment {
     return this.date.getDay() === 0
   }
 
-  isValidDistance() {
-    return this.distance && typeof this.distance === 'number' && this.distance > 0
-  }
-
   isValidDate() {
     return this.date && this.date instanceof Date && this.date.toString() !== 'Invalid Date'
+  }
+
+  calculateDistance() {
+    return Math.trunc(calculate(this.from[0], this.from[1], this.to[0], this.to[1]))
   }
 }
