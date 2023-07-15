@@ -1,5 +1,5 @@
-import { CreateDriver } from "../../src/application/useCases/CreateDriver"
-import { DriverRepositoryDatabase } from "../../src/infra/repositories/DriverRepositoryDatabase"
+import { CreateDriver } from '../../src/application/useCases/CreateDriver'
+import { DriverRepositoryDatabase } from '../../src/infra/repositories/DriverRepositoryDatabase'
 
 it('should create a driver an return id', async () => {
   const input = {

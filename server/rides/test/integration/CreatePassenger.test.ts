@@ -1,5 +1,5 @@
-import { CreatePassenger } from "../../src/application/useCases/CreatePassenger"
-import { PassengerRepositoryDatabase } from "../../src/infra/repositories/PassengerRepositoryDatabase"
+import { CreatePassenger } from '../../src/application/useCases/CreatePassenger'
+import { PassengerRepositoryDatabase } from '../../src/infra/repositories/PassengerRepositoryDatabase'
 
 it('should create a passenger an return id', async () => {
   const input = {
