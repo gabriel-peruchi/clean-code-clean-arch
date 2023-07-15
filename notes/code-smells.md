@@ -60,3 +60,15 @@ extrair variáveis explicativas
 ## 9 - classe longa
 
 ...
+
+## 10 - regex muito complexa
+
+técnicas de refactoring:
+
+simplificar regex
+
+## 11 - variável declarada no lugar errado
+
+técnicas de refactoring:
+
+mover a variável
