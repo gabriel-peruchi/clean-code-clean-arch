@@ -20,9 +20,9 @@ export class GetDriver {
     return {
       id: driver.id,
       name: driver.name,
-      email: driver.email,
-      document: driver.document,
-      carPlate: driver.carPlate
+      email: driver.email.value,
+      document: driver.document.value,
+      carPlate: driver.carPlate.value
     }
   }
 }

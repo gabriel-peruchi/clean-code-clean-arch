@@ -58,7 +58,7 @@ it('should create a driver and return the id', async () => {
     name: 'Gabriel Peruchi',
     email: 'gabriel@hotmail.com',
     document: '83432616074',
-    carPlate: 'AAA999'
+    carPlate: 'AAA9999'
   }
   const response = await axios.post('http://localhost:3333/drivers', input)
   const output = response.data

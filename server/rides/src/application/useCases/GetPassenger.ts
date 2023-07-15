@@ -19,8 +19,8 @@ export class GetPassenger {
     return {
       id: passenger.id,
       name: passenger.name,
-      email: passenger.email,
-      document: passenger.document
+      email: passenger.email.value,
+      document: passenger.document.value
     }
   }
 }

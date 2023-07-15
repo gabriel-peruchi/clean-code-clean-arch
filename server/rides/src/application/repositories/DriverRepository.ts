@@ -1,4 +1,6 @@
+import { Driver } from "../../domain/Driver"
+
 export interface DriverRepository {
-  create(driver: any): Promise<void>
-  findById(driverId: any): Promise<any>
+  create(driver: Driver): Promise<void>
+  findById(driverId: string): Promise<Driver>
 }

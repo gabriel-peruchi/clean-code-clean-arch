@@ -1,7 +1,5 @@
-import crypto from 'node:crypto'
-
-import { validate } from '../../CpfValidator'
 import { DriverRepository } from '../repositories/DriverRepository'
+import { Driver } from '../../domain/Driver'
 
 type CreateDriverInput = {
   name: string
@@ -18,9 +16,8 @@ export class CreateDriver {
   constructor(readonly driverRepository: DriverRepository) { }
 
   async execute(input: CreateDriverInput): Promise<CreateDriverOutput> {
-    const driverId = crypto.randomUUID()
-    if (!validate(input.document)) throw new Error("Invalid cpf")
-    await this.driverRepository.create(Object.assign(input, { id: driverId }))
-    return { driverId }
+    const driver = Driver.create(input.name, input.email, input.document, input.carPlate)
+    await this.driverRepository.create(driver)
+    return { driverId: driver.id }
   }
 }

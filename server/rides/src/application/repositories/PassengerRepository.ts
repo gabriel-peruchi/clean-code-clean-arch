@@ -1,4 +1,6 @@
+import { Passenger } from "../../domain/Passenger"
+
 export interface PassengerRepository {
-  create(passenger: any): Promise<void>
-  findById(passengerId: any): Promise<any>
+  create(passenger: Passenger): Promise<void>
+  findById(passengerId: string): Promise<Passenger>
 }

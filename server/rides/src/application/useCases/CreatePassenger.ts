@@ -1,7 +1,5 @@
-import crypto from 'node:crypto'
-
-import { validate } from '../../CpfValidator'
 import { PassengerRepository } from '../repositories/PassengerRepository'
+import { Passenger } from '../../domain/Passenger'
 
 type CreatePassengerInput = {
   name: string
@@ -17,9 +15,8 @@ export class CreatePassenger {
   constructor(readonly passengerRepository: PassengerRepository) { }
 
   async execute(input: CreatePassengerInput): Promise<CreatePassengerOutput> {
-    const passengerId = crypto.randomUUID()
-    if (!validate(input.document)) throw new Error("Invalid cpf")
-    await this.passengerRepository.create(Object.assign(input, { id: passengerId }))
-    return { passengerId }
+    const passenger = Passenger.create(input.name, input.email, input.document)
+    await this.passengerRepository.create(passenger)
+    return { passengerId: passenger.id }
   }
 }
