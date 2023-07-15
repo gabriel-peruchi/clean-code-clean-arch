@@ -1,4 +1,5 @@
 import { CreateDriver } from "../../src/application/useCases/CreateDriver"
+import { DriverRepositoryDatabase } from "../../src/infra/repositories/DriverRepositoryDatabase"
 
 it('should create a driver an return id', async () => {
   const input = {
@@ -7,7 +8,7 @@ it('should create a driver an return id', async () => {
     email: 'gabriel@hotmail.com',
     carPlate: 'AAA9999'
   }
-  const createDriver = new CreateDriver()
+  const createDriver = new CreateDriver(new DriverRepositoryDatabase())
   const output = await createDriver.execute(input)
   expect(output.driverId).toBeDefined()
 })

@@ -1,4 +1,4 @@
-import pgp from 'pg-promise'
+import { DriverRepository } from '../repositories/DriverRepository'
 
 type GetDriverInput = {
   driverId: string
@@ -13,18 +13,16 @@ type GetDriverOutput = {
 }
 
 export class GetDriver {
-  constructor() { }
+  constructor(readonly driverRepository: DriverRepository) { }
 
   async execute({ driverId }: GetDriverInput): Promise<GetDriverOutput> {
-    const connection = pgp()("postgres://postgres:admin@localhost:5432/postgres")
-    const [driverData] = await connection.query("select * from drivers where id = $1", [driverId])
-    await connection.$pool.end()
+    const driver = await this.driverRepository.findById(driverId)
     return {
-      id: driverData.id,
-      name: driverData.name,
-      email: driverData.email,
-      document: driverData.document,
-      carPlate: driverData.car_plate
+      id: driver.id,
+      name: driver.name,
+      email: driver.email,
+      document: driver.document,
+      carPlate: driver.carPlate
     }
   }
 }

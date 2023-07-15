@@ -1,4 +1,4 @@
-import pgp from 'pg-promise'
+import { PassengerRepository } from '../repositories/PassengerRepository'
 
 type GetPassengerInput = {
   passengerId: string
@@ -12,17 +12,15 @@ type GetPassengerOutput = {
 }
 
 export class GetPassenger {
-  constructor() { }
+  constructor(readonly passengerRepository: PassengerRepository) { }
 
   async execute({ passengerId }: GetPassengerInput): Promise<GetPassengerOutput> {
-    const connection = pgp()("postgres://postgres:admin@localhost:5432/postgres")
-    const [passengerData] = await connection.query("select * from passengers where id = $1", [passengerId])
-    await connection.$pool.end()
+    const passenger = await this.passengerRepository.findById(passengerId)
     return {
-      id: passengerData.id,
-      name: passengerData.name,
-      email: passengerData.email,
-      document: passengerData.document
+      id: passenger.id,
+      name: passenger.name,
+      email: passenger.email,
+      document: passenger.document
     }
   }
 }

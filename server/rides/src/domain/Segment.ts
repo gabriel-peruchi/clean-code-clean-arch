@@ -1,4 +1,4 @@
-import { calculate } from "./DistanceCalculator"
+import { calculate } from "../DistanceCalculator"
 
 export type Coordinates = [number, number]
 

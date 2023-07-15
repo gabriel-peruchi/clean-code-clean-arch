@@ -5,6 +5,8 @@ import { CreatePassenger } from './application/useCases/CreatePassenger'
 import { GetPassenger } from './application/useCases/GetPassenger'
 import { CreateDriver } from './application/useCases/CreateDriver'
 import { GetDriver } from './application/useCases/GetDriver'
+import { PassengerRepositoryDatabase } from './infra/repositories/PassengerRepositoryDatabase'
+import { DriverRepositoryDatabase } from './infra/repositories/DriverRepositoryDatabase'
 
 const app = express()
 app.use(express.json())
@@ -21,7 +23,7 @@ app.post('/calculate-ride', async (req, res) => {
 
 app.post("/passengers", async (req, res) => {
   try {
-    const createPassenger = new CreatePassenger()
+    const createPassenger = new CreatePassenger(new PassengerRepositoryDatabase())
     const output = await createPassenger.execute(req.body)
     res.json(output)
   } catch (e: any) {
@@ -30,14 +32,14 @@ app.post("/passengers", async (req, res) => {
 })
 
 app.get("/passengers/:passengerId", async (req, res) => {
-  const getPassenger = new GetPassenger()
+  const getPassenger = new GetPassenger(new PassengerRepositoryDatabase())
   const output = await getPassenger.execute({ passengerId: req.params.passengerId })
   res.json(output)
 })
 
 app.post("/drivers", async function (req, res) {
   try {
-    const createDriver = new CreateDriver()
+    const createDriver = new CreateDriver(new DriverRepositoryDatabase())
     const output = await createDriver.execute(req.body)
     res.json(output)
   } catch (e: any) {
@@ -46,7 +48,7 @@ app.post("/drivers", async function (req, res) {
 })
 
 app.get("/drivers/:driverId", async (req, res) => {
-  const getDriver = new GetDriver()
+  const getDriver = new GetDriver(new DriverRepositoryDatabase())
   const output = await getDriver.execute({ driverId: req.params.driverId })
   res.json(output)
 })

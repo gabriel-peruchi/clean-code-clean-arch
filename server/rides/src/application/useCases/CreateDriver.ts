@@ -1,7 +1,7 @@
-import pgp from 'pg-promise'
 import crypto from 'node:crypto'
 
 import { validate } from '../../CpfValidator'
+import { DriverRepository } from '../repositories/DriverRepository'
 
 type CreateDriverInput = {
   name: string
@@ -15,14 +15,12 @@ type CreateDriverOutput = {
 }
 
 export class CreateDriver {
-  constructor() { }
+  constructor(readonly driverRepository: DriverRepository) { }
 
   async execute(input: CreateDriverInput): Promise<CreateDriverOutput> {
-    const connection = pgp()("postgres://postgres:admin@localhost:5432/postgres")
     const driverId = crypto.randomUUID()
     if (!validate(input.document)) throw new Error("Invalid cpf")
-    await connection.query("insert into drivers (id, name, email, document, car_plate) values ($1, $2, $3, $4, $5)", [driverId, input.name, input.email, input.document, input.carPlate])
-    await connection.$pool.end()
+    await this.driverRepository.create(Object.assign(input, { id: driverId }))
     return { driverId }
   }
 }
