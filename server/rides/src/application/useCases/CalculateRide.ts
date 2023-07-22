@@ -1,9 +1,9 @@
 import { Ride } from '../../domain/Ride'
 
 type CalculateRideInput = {
-  segments: {
-    from: [number, number],
-    to: [number, number],
+  positions: {
+    lat: number,
+    long: number,
     date: Date
   }[]
 }
@@ -15,10 +15,10 @@ type CalculateRideOutput = {
 export class CalculateRide {
   constructor() {}
 
-  async execute({ segments }: CalculateRideInput): Promise<CalculateRideOutput> {
+  async execute({ positions }: CalculateRideInput): Promise<CalculateRideOutput> {
     const ride = new Ride()
-    for (const segment of segments) {
-      ride.addSegment(segment.from, segment.to, new Date(segment.date))
+    for (const position of positions) {
+      ride.addPosition(position.lat, position.long, new Date(position.date))
     }
     const price = ride.calculate()
     return { price }
