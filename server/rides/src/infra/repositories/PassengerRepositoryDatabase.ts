@@ -1,19 +1,17 @@
-import pgp from 'pg-promise'
+import { Passenger } from '../../domain/Passenger'
+import { DatabaseConnection } from '../database/DatabaseConnection'
+import { PassengerRepository } from "../../application/repositories/PassengerRepository"
 
-import { PassengerRepository } from "../../application/repositories/PassengerRepository";
-import { Passenger } from '../../domain/Passenger';
-
+// Interface Adapter
 export class PassengerRepositoryDatabase implements PassengerRepository {
+  constructor(readonly connection: DatabaseConnection) {}
+  
   async create(passenger: Passenger): Promise<void> {
-    const connection = pgp()("postgres://postgres:admin@localhost:5432/postgres")
-    await connection.query("insert into passengers (id, name, email, document) values ($1, $2, $3, $4)", [passenger.id, passenger.name, passenger.email.value, passenger.document.value])
-    await connection.$pool.end()
+    await this.connection.query("insert into passengers (id, name, email, document) values ($1, $2, $3, $4)", [passenger.id, passenger.name, passenger.email.value, passenger.document.value])
   }
   
   async findById(passengerId: string): Promise<Passenger> {
-    const connection = pgp()("postgres://postgres:admin@localhost:5432/postgres")
-    const [passengerData] = await connection.query("select * from passengers where id = $1", [passengerId])
-    await connection.$pool.end()
+    const [passengerData] = await this.connection.query("select * from passengers where id = $1", [passengerId])
     return new Passenger(passengerData.id, passengerData.name, passengerData.email, passengerData.document)
   }
 }

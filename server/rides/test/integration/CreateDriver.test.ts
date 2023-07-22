@@ -1,4 +1,5 @@
 import { CreateDriver } from '../../src/application/useCases/CreateDriver'
+import { PgPromiseAdapter } from '../../src/infra/database/PgPromiseAdapter'
 import { DriverRepositoryDatabase } from '../../src/infra/repositories/DriverRepositoryDatabase'
 
 it('should create a driver an return id', async () => {
@@ -8,7 +9,9 @@ it('should create a driver an return id', async () => {
     email: 'gabriel@hotmail.com',
     carPlate: 'AAA9999'
   }
-  const createDriver = new CreateDriver(new DriverRepositoryDatabase())
+  const connection = new PgPromiseAdapter()
+  const createDriver = new CreateDriver(new DriverRepositoryDatabase(connection))
   const output = await createDriver.execute(input)
   expect(output.driverId).toBeDefined()
+  await connection.close()
 })

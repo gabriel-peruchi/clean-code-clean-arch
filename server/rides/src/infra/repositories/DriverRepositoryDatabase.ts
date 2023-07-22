@@ -1,19 +1,17 @@
-import pgp from 'pg-promise'
-
-import { DriverRepository } from "../../application/repositories/DriverRepository"
 import { Driver } from '../../domain/Driver'
+import { DatabaseConnection } from '../database/DatabaseConnection'
+import { DriverRepository } from "../../application/repositories/DriverRepository"
 
+// Interface Adapter
 export class DriverRepositoryDatabase implements DriverRepository {
+  constructor(readonly connection: DatabaseConnection) {}
+
   async create(driver: Driver): Promise<void> {
-    const connection = pgp()("postgres://postgres:admin@localhost:5432/postgres")
-    await connection.query("insert into drivers (id, name, email, document, car_plate) values ($1, $2, $3, $4, $5)", [driver.id, driver.name, driver.email.value, driver.document.value, driver.carPlate.value])
-    await connection.$pool.end()
+    await this.connection.query("insert into drivers (id, name, email, document, car_plate) values ($1, $2, $3, $4, $5)", [driver.id, driver.name, driver.email.value, driver.document.value, driver.carPlate.value])
   }
   
   async findById(driverId: string): Promise<Driver> {
-    const connection = pgp()("postgres://postgres:admin@localhost:5432/postgres")
-    const [driverData] = await connection.query("select * from drivers where id = $1", [driverId])
-    await connection.$pool.end()
+    const [driverData] = await this.connection.query("select * from drivers where id = $1", [driverId])
     return new Driver(driverData.id, driverData.name, driverData.email, driverData.document, driverData.car_plate)
   }
 }

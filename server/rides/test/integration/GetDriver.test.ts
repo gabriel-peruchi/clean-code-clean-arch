@@ -3,6 +3,7 @@ import { DriverRepository } from '../../src/application/repositories/DriverRepos
 import { CreateDriver } from '../../src/application/useCases/CreateDriver'
 import { GetDriver } from '../../src/application/useCases/GetDriver'
 import { DriverRepositoryDatabase } from '../../src/infra/repositories/DriverRepositoryDatabase'
+import { PgPromiseAdapter } from '../../src/infra/database/PgPromiseAdapter'
 
 // narrow integration test
 it('should get a driver', async function () {
@@ -38,12 +39,14 @@ it('should get a driver', async function () {
     email: 'gabriel@hotmail.com',
     carPlate: 'AAA9999'
   }
-  const createDriver = new CreateDriver(new DriverRepositoryDatabase())
+  const connection = new PgPromiseAdapter()
+  const createDriver = new CreateDriver(new DriverRepositoryDatabase(connection))
   const outputCreateDriver = await createDriver.execute(input)
-  const getDriver = new GetDriver(new DriverRepositoryDatabase())
+  const getDriver = new GetDriver(new DriverRepositoryDatabase(connection))
   const outputGetDriver = await getDriver.execute({ driverId: outputCreateDriver.driverId })
   expect(outputGetDriver.name).toBe(input.name)
   expect(outputGetDriver.email).toBe(input.email)
   expect(outputGetDriver.document).toBe(input.document)
   expect(outputGetDriver.carPlate).toBe(input.carPlate)
+  await connection.close()
 })

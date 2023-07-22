@@ -10,7 +10,7 @@ it('should calculate price of a ride during the day', async () => {
       date: new Date('2023-06-29T10:00:00')
     }]
   }
-  const response = await axios.post('http://localhost:3333/calculate-ride', input)
+  const response = await axios.post('http://localhost:3333/rides/calculate-ride', input)
   const output = response.data
   expect(output.price).toBe(21)
 })
