@@ -54,3 +54,9 @@ it('should accept a ride', () => {
   ride.accept('fakeId', new Date('2021-03-01T10:10:00'))
   expect(ride.status).toBe('accepted')
 })
+
+it('should start a ride', () => {
+  const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
+  ride.start(new Date('2021-03-01T10:20:00'))
+  expect(ride.status).toBe('in_progress')
+})
