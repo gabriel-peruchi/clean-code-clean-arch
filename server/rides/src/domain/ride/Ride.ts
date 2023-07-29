@@ -1,18 +1,21 @@
+import crypto from 'node:crypto'
+
+import { Segment } from './Segment'
+import { Position } from './Position'
 import { NormalFareCalculatorHandler } from './../fare/chain-of-responsibility/NormalFareCalculatorHandler'
 import { DistanceCalculator } from '../distance/DistanceCalculator'
-import { Position } from './Position'
-import { Segment } from './Segment'
 import { FareCalculatorHandler } from '../fare/chain-of-responsibility/FareCalculatorHandler'
 import { OvernightFareCalculatorHandler } from '../fare/chain-of-responsibility/OvernightFareCalculatorHandler'
 import { SundayFareCalculatorHandler } from '../fare/chain-of-responsibility/SundayFareCalculatorHandler'
 import { OvernightSundayFareCalculatorHandler } from '../fare/chain-of-responsibility/OvernightSundayFareCalculatorHandler'
+import { Coordinate } from '../distance/Coordinate'
 
 export class Ride {
   MIN_PRICE = 10
   positions: Position[]
   fareCalculator: FareCalculatorHandler
 
-  constructor() {
+  constructor(readonly id: string, readonly passengerId: string, readonly from: Coordinate, readonly to: Coordinate, readonly status: string, readonly requestDate: Date) {
     this.positions = []
     const overnightSundayFareCalculator = new OvernightSundayFareCalculatorHandler()
     const sundayFareCalculator = new SundayFareCalculatorHandler(overnightSundayFareCalculator)
@@ -36,5 +39,11 @@ export class Ride {
       price += this.fareCalculator.handle(segment)
     }
     return (price < this.MIN_PRICE) ? this.MIN_PRICE : price
+  }
+
+  static create (passengerId: string, from: Coordinate, to: Coordinate, requestDate: Date = new Date()) {
+    const rideId = crypto.randomUUID()
+    const status = 'requested'
+    return new Ride(rideId, passengerId, from, to, status, requestDate)
   }
 }
