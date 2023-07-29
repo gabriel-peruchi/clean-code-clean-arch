@@ -1,4 +1,4 @@
-import { CarPlate } from "../../src/domain/CarPlate"
+import { CarPlate } from "../../src/domain/driver/CarPlate"
 
 it('should validate a valid car plate', () => {
   const carPlate = new CarPlate('AAA9999')

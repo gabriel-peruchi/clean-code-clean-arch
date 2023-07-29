@@ -1,5 +1,5 @@
 import { DriverRepository } from '../repositories/DriverRepository'
-import { Driver } from '../../domain/Driver'
+import { Driver } from '../../domain/driver/Driver'
 
 type CreateDriverInput = {
   name: string

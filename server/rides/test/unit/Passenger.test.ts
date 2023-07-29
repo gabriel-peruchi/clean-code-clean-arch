@@ -1,4 +1,4 @@
-import { Passenger } from "../../src/domain/Passenger"
+import { Passenger } from "../../src/domain/passenger/Passenger"
 
 it('should create a passenger', () => {
   const passenger = Passenger.create('Gabriel', 'gabriel@hotmail.com', '83432616074')

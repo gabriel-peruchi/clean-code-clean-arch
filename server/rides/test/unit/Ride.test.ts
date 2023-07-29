@@ -1,5 +1,5 @@
 
-import { Ride } from '../../src/domain/Ride'
+import { Ride } from '../../src/domain/ride/Ride'
 
 it('should calculate price of a ride during the day', () => {
   const ride = new Ride()

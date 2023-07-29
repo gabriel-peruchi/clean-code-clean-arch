@@ -1,5 +1,5 @@
 import { PassengerRepository } from '../repositories/PassengerRepository'
-import { Passenger } from '../../domain/Passenger'
+import { Passenger } from '../../domain/passenger/Passenger'
 
 type CreatePassengerInput = {
   name: string

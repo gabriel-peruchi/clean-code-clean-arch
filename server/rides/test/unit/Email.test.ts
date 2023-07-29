@@ -1,4 +1,4 @@
-import { Email } from "../../src/domain/Email"
+import { Email } from "../../src/domain/person/Email"
 
 it('should validate a valid email', () => {
   const email = new Email('gabriel@inmeta.com.br')

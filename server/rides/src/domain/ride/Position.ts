@@ -1,4 +1,4 @@
-import { Coordinate } from './Coordinate'
+import { Coordinate } from '../distance/Coordinate'
 
 export class Position {
   coordinate: Coordinate

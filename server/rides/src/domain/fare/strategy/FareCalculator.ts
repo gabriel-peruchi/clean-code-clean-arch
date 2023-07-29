@@ -1,4 +1,4 @@
-import { Segment } from './Segment'
+import { Segment } from '../../ride/Segment'
 
 export interface FareCalculator {
   calculate(segment: Segment): number

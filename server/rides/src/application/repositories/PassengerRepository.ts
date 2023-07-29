@@ -1,4 +1,4 @@
-import { Passenger } from "../../domain/Passenger"
+import { Passenger } from "../../domain/passenger/Passenger"
 
 export interface PassengerRepository {
   create(passenger: Passenger): Promise<void>

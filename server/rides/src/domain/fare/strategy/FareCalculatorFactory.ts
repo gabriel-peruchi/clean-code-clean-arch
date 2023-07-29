@@ -2,7 +2,7 @@ import { NormalFareCalculator } from './NormalFareCalculator';
 import { FareCalculator } from "./FareCalculator"
 import { OvernightFareCalculator } from "./OvernightFareCalculator"
 import { OvernightSundayFareCalculator } from "./OvernightSundayFareCalculator"
-import { Segment } from "./Segment"
+import { Segment } from "../../ride/Segment"
 import { SundayFareCalculator } from "./SundayFareCalculator"
 
 export class FareCalculatorFactory {

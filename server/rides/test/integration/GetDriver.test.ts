@@ -1,4 +1,4 @@
-import { Driver } from './../../src/domain/Driver'
+import { Driver } from '../../src/domain/driver/Driver'
 import { DriverRepository } from '../../src/application/repositories/DriverRepository'
 import { CreateDriver } from '../../src/application/useCases/CreateDriver'
 import { GetDriver } from '../../src/application/useCases/GetDriver'

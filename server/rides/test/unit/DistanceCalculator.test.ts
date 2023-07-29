@@ -1,5 +1,5 @@
-import { Coordinate } from "../../src/domain/Coordinate"
-import { DistanceCalculator } from "../../src/domain/DistanceCalculator"
+import { Coordinate } from "../../src/domain/distance/Coordinate"
+import { DistanceCalculator } from "../../src/domain/distance/DistanceCalculator"
 
 it('should calculate the distance between two coordinates', () => {
   const from = new Coordinate(-27.584905257808835, -48.545022195325124)

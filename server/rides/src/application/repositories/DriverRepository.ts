@@ -1,4 +1,4 @@
-import { Driver } from "../../domain/Driver"
+import { Driver } from "../../domain/driver/Driver"
 
 export interface DriverRepository {
   create(driver: Driver): Promise<void>

@@ -1,4 +1,4 @@
-import { Passenger } from '../../domain/Passenger'
+import { Passenger } from '../../domain/passenger/Passenger'
 import { DatabaseConnection } from '../database/DatabaseConnection'
 import { PassengerRepository } from "../../application/repositories/PassengerRepository"
 

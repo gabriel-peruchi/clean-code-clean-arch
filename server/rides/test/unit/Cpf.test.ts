@@ -1,4 +1,4 @@
-import { Cpf } from '../../src/domain/Cpf'
+import { Cpf } from '../../src/domain/person/Cpf'
 
 it.each(['83432616074', '74587887803', '87175659520'])('should validate valid cpfs', (value: string) => {
   const cpf = new Cpf(value)

@@ -1,4 +1,4 @@
-import { Driver } from "../../src/domain/Driver"
+import { Driver } from "../../src/domain/driver/Driver"
 
 it('should create a driver', () => {
   const driver = Driver.create('Gabriel', 'gabriel@hotmail.com', '83432616074', 'AAA9999')
