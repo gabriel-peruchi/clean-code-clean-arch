@@ -21,9 +21,9 @@ export class GetRide {
     const ride = await this.rideRepository.findById(rideId)
     return {
       id: ride.id,
-      status: ride.status,
       driverId: ride.driverId,
       startDate: ride.startDate,
+      status: ride.status.value,
       acceptDate: ride.acceptDate,
       requestDate: ride.requestDate,
       endDate: ride.endDate,

@@ -46,23 +46,36 @@ it('should calculate price of a ride during the day with minimum price', () => {
 
 it('should request a ride', () => {
   const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
-  expect(ride.status).toBe('requested')
+  expect(ride.status.value).toBe('requested')
 })
 
 it('should accept a ride', () => {
   const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
   ride.accept('fakeId', new Date('2021-03-01T10:10:00'))
-  expect(ride.status).toBe('accepted')
+  expect(ride.status.value).toBe('accepted')
 })
 
 it('should start a ride', () => {
   const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
+  ride.accept('fakeId', new Date('2021-03-01T10:10:00'))
   ride.start(new Date('2021-03-01T10:20:00'))
-  expect(ride.status).toBe('in_progress')
+  expect(ride.status.value).toBe('in_progress')
 })
 
 it('should end a ride', () => {
   const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
+  ride.accept('fakeId', new Date('2021-03-01T10:10:00'))
+  ride.start(new Date('2021-03-01T10:20:00'))
   ride.end(new Date('2021-03-01T10:40:00'))
-  expect(ride.status).toBe('completed')
+  expect(ride.status.value).toBe('completed')
+})
+
+it('should not start a ride if the ride is not accepted', () => {
+  const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
+  expect(() => ride.start(new Date('2021-03-01T10:40:00'))).toThrow('Invalid status')
+})
+
+it('should not end a ride if the ride is not in progress', () => {
+  const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
+  expect(() => ride.end(new Date('2021-03-01T10:40:00'))).toThrow('Invalid status')
 })
