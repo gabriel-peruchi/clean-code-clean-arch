@@ -11,6 +11,7 @@ type GetRideOutput = {
   driverId?: string
   acceptDate?: Date
   startDate?: Date
+  endDate?: Date
 }
 
 export class GetRide {
@@ -25,6 +26,7 @@ export class GetRide {
       startDate: ride.startDate,
       acceptDate: ride.acceptDate,
       requestDate: ride.requestDate,
+      endDate: ride.endDate,
     }
   }
 }

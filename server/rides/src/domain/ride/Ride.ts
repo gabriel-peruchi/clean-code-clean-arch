@@ -17,6 +17,7 @@ export class Ride {
   driverId?: string
   acceptDate?: Date
   startDate?: Date
+  endDate?: Date
 
   constructor(readonly id: string, readonly passengerId: string, readonly from: Coordinate, readonly to: Coordinate, public status: string, readonly requestDate: Date) {
     this.positions = []
@@ -55,7 +56,12 @@ export class Ride {
     this.startDate = date
   }
 
-  static create (passengerId: string, from: Coordinate, to: Coordinate, requestDate: Date = new Date()) {
+  end(date: Date) {
+    this.status = 'completed'
+    this.endDate = date
+  }
+
+  static create(passengerId: string, from: Coordinate, to: Coordinate, requestDate: Date = new Date()) {
     const rideId = crypto.randomUUID()
     const status = 'requested'
     return new Ride(rideId, passengerId, from, to, status, requestDate)

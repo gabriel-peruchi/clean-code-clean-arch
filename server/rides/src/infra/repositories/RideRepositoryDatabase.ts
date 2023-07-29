@@ -15,8 +15,8 @@ export class RideRepositoryDatabase implements RideRepository {
 
   async update(ride: Ride): Promise<void> {
     await this.connection.query(
-      "update ccca.rides set driver_id = $1, status = $2, accept_date = $3, start_date = $4 where id = $5",
-      [ride.driverId, ride.status, ride.acceptDate, ride.startDate, ride.id]
+      "update ccca.rides set driver_id = $1, status = $2, accept_date = $3, start_date = $4, end_date = $5 where id = $6",
+      [ride.driverId, ride.status, ride.acceptDate, ride.startDate, ride.endDate, ride.id]
     )
   }
 
@@ -33,6 +33,7 @@ export class RideRepositoryDatabase implements RideRepository {
     ride.driverId = rideData.driver_id
     ride.acceptDate = rideData.accept_date
     ride.startDate = rideData.start_date
+    ride.endDate = rideData.end_date
     return ride
   }
 }

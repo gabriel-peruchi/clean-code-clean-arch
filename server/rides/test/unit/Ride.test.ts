@@ -60,3 +60,9 @@ it('should start a ride', () => {
   ride.start(new Date('2021-03-01T10:20:00'))
   expect(ride.status).toBe('in_progress')
 })
+
+it('should end a ride', () => {
+  const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
+  ride.end(new Date('2021-03-01T10:40:00'))
+  expect(ride.status).toBe('completed')
+})
