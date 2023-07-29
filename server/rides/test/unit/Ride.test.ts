@@ -43,3 +43,14 @@ it('should calculate price of a ride during the day with minimum price', () => {
   ride.addPosition(-27.579020277800876, -48.50838017206791, new Date('2021-03-01T10:00:00'))
   expect(ride.calculate()).toBe(10)
 })
+
+it('should request a ride', () => {
+  const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
+  expect(ride.status).toBe('requested')
+})
+
+it('should accept a ride', () => {
+  const ride = Ride.create('fakeId', new Coordinate(0, 0), new Coordinate(0, 0))
+  ride.accept('fakeId', new Date('2021-03-01T10:10:00'))
+  expect(ride.status).toBe('accepted')
+})

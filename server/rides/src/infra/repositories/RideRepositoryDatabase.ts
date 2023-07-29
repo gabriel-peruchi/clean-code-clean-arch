@@ -13,9 +13,16 @@ export class RideRepositoryDatabase implements RideRepository {
     )
   }
 
+  async update(ride: Ride): Promise<void> {
+    await this.connection.query(
+      "update ccca.rides set driver_id = $1, status = $2, accept_date = $3 where id = $4",
+      [ride.driverId, ride.status, ride.acceptDate, ride.id]
+    )
+  }
+
   async findById(rideId: string): Promise<Ride> {
     const [rideData] = await this.connection.query("select * from ccca.rides where id = $1", [rideId])
-    return new Ride(
+    const ride = new Ride(
       rideData.id,
       rideData.passenger_id,
       new Coordinate(parseFloat(rideData.from_lat), parseFloat(rideData.from_long)),
@@ -23,5 +30,8 @@ export class RideRepositoryDatabase implements RideRepository {
       rideData.status,
       rideData.request_date
     )
+    ride.driverId = rideData.driver_id
+    ride.acceptDate = rideData.accept_date
+    return ride
   }
 }
