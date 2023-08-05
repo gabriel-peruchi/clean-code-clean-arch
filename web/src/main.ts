@@ -4,10 +4,12 @@ import App from './App.vue'
 import { PassengerGatewayHttp } from './infra/gateway/PassengerGatewayHttp'
 import { DriverGatewayHttp } from './infra/gateway/DriverGatewayHttp'
 import { AxiosAdapter } from './infra/http/AxiosAdapter'
+import { GeoLocationNavigatorAdpater } from './infra/geolocation/GeoLocationNavigatorAdpater'
 
 const app = createApp(App)
 // const httpClient = new FetchAdapter()
 const httpClient = new AxiosAdapter()
 app.provide('passengerGateway', new PassengerGatewayHttp(httpClient))
 app.provide('driverGateway', new DriverGatewayHttp(httpClient))
+app.provide('geoLocation', new GeoLocationNavigatorAdpater())
 app.mount('#app')

@@ -11,18 +11,22 @@ import { RideController } from './infra/http/RideController'
 import { DriverController } from './infra/http/DriverController'
 import { PassengerController } from './infra/http/PassengerController'
 import { ExpressAdapter } from './infra/http/ExpressAdapter'
+import { RequestRide } from './application/useCases/RequestRide'
+import { RideRepositoryDatabase } from './infra/repositories/RideRepositoryDatabase'
 
 // main composition root
 const connection = new PgPromiseAdapter()
 const passengerRepository = new PassengerRepositoryDatabase(connection)
 const driverRepository = new DriverRepositoryDatabase(connection)
+const rideRepository = new RideRepositoryDatabase(connection)
 const calculateRide = new CalculateRide()
 const createDriver = new CreateDriver(driverRepository)
 const getDriver = new GetDriver(driverRepository)
 const createPassenger = new CreatePassenger(passengerRepository)
 const getPassenger = new GetPassenger(passengerRepository)
+const requestRide = new RequestRide(rideRepository)
 const httpServer = new ExpressAdapter()
-new RideController(httpServer, calculateRide)
+new RideController(httpServer, calculateRide, requestRide)
 new DriverController(httpServer, createDriver, getDriver)
 new PassengerController(httpServer, createPassenger, getPassenger)
 httpServer.listen(3333)
