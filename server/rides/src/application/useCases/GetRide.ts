@@ -9,6 +9,7 @@ type GetRideOutput = {
   status: string
   requestDate: Date
   driverId?: string
+  passengerId: string
   acceptDate?: Date
   startDate?: Date
   endDate?: Date
@@ -22,6 +23,7 @@ export class GetRide {
     return {
       id: ride.id,
       driverId: ride.driverId,
+      passengerId: ride.passengerId,
       startDate: ride.startDate,
       status: ride.status.value,
       acceptDate: ride.acceptDate,
