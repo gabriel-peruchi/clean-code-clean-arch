@@ -6,6 +6,8 @@ import { GetRide } from "../../src/application/useCases/GetRide"
 import { RequestRide } from "../../src/application/useCases/RequestRide"
 import { StartRide } from "../../src/application/useCases/StartRide"
 import { PgPromiseAdapter } from "../../src/infra/database/PgPromiseAdapter"
+import { PaymentGatewayHtpp } from "../../src/infra/gateways/PaymentGatewayHttp"
+import { AxiosAdapter } from "../../src/infra/http/AxiosAdapter"
 import { DriverRepositoryDatabase } from "../../src/infra/repositories/DriverRepositoryDatabase"
 import { PassengerRepositoryDatabase } from "../../src/infra/repositories/PassengerRepositoryDatabase"
 import { RideRepositoryDatabase } from "../../src/infra/repositories/RideRepositoryDatabase"
@@ -63,7 +65,7 @@ it('should end a ride', async () => {
     rideId: outputRequestRide.rideId,
     date: new Date('2021-03-01T10:40:00')
   }
-  const endRide = new EndRide(new RideRepositoryDatabase(connection))
+  const endRide = new EndRide(new RideRepositoryDatabase(connection), new PassengerRepositoryDatabase(connection), new PaymentGatewayHtpp(new AxiosAdapter()))
   await endRide.execute(inputEndRide)
 
   const getRide = new GetRide(new RideRepositoryDatabase(connection))
