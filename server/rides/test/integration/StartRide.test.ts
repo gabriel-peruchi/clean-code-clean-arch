@@ -1,12 +1,10 @@
 import { AcceptRide } from "../../src/application/useCases/AcceptRide"
-import { CreateDriver } from "../../src/application/useCases/CreateDriver"
-import { CreatePassenger } from "../../src/application/useCases/CreatePassenger"
 import { GetRide } from "../../src/application/useCases/GetRide"
 import { RequestRide } from "../../src/application/useCases/RequestRide"
 import { StartRide } from "../../src/application/useCases/StartRide"
 import { PgPromiseAdapter } from "../../src/infra/database/PgPromiseAdapter"
-import { DriverRepositoryDatabase } from "../../src/infra/repositories/DriverRepositoryDatabase"
-import { PassengerRepositoryDatabase } from "../../src/infra/repositories/PassengerRepositoryDatabase"
+import { AccountGatewayHttp } from "../../src/infra/gateways/AccountGatewayHttp"
+import { AxiosAdapter } from "../../src/infra/http/AxiosAdapter"
 import { RideRepositoryDatabase } from "../../src/infra/repositories/RideRepositoryDatabase"
 
 it('should start a ride', async () => {
@@ -16,8 +14,8 @@ it('should start a ride', async () => {
     email: 'gabriel@hotmail.com'
   }
   const connection = new PgPromiseAdapter()
-  const createPassenger = new CreatePassenger(new PassengerRepositoryDatabase(connection))
-  const outputCreatePassenger = await createPassenger.execute(inputCreatePassenger)
+  const accountGateway = new AccountGatewayHttp(new AxiosAdapter())
+  const outputCreatePassenger = await accountGateway.createPassenger(inputCreatePassenger)
 
   const inputRequestRide = {
     passengerId: outputCreatePassenger.passengerId,
@@ -40,8 +38,7 @@ it('should start a ride', async () => {
     email: 'gabriel@hotmail.com',
     carPlate: 'AAA9999'
   }
-  const createDriver = new CreateDriver(new DriverRepositoryDatabase(connection))
-  const outputCreateDriver = await createDriver.execute(inputCreateDriver)
+  const outputCreateDriver = await accountGateway.createDriver(inputCreateDriver)
 
   const inputAcceptRide = {
     rideId: outputRequestRide.rideId,
@@ -58,7 +55,7 @@ it('should start a ride', async () => {
   const startRide = new StartRide(new RideRepositoryDatabase(connection))
   await startRide.execute(inputStartRide)
 
-  const getRide = new GetRide(new RideRepositoryDatabase(connection))
+  const getRide = new GetRide(new RideRepositoryDatabase(connection), accountGateway)
   const outputGetRide = await getRide.execute({ rideId: outputRequestRide.rideId })
   expect(outputGetRide.status).toBe('in_progress')
   expect(outputGetRide.startDate).toEqual(new Date('2021-03-01T10:20:00'))

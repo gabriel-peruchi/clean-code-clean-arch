@@ -13,8 +13,9 @@ export class ExpressAdapter implements HttpServer {
     this.app.use(cors())
   }
 
-  listen(port: number): void {
+  listen(port: number, callback?: () => void): void {
     this.app.listen(port)
+    if (callback) callback()
   }
 
   on(method: HttpMethod, url: string, callback: HttpCallback): void {

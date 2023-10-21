@@ -1,11 +1,9 @@
 import { AcceptRide } from "../../src/application/useCases/AcceptRide"
-import { CreateDriver } from "../../src/application/useCases/CreateDriver"
-import { CreatePassenger } from "../../src/application/useCases/CreatePassenger"
 import { GetRide } from "../../src/application/useCases/GetRide"
 import { RequestRide } from "../../src/application/useCases/RequestRide"
 import { PgPromiseAdapter } from "../../src/infra/database/PgPromiseAdapter"
-import { DriverRepositoryDatabase } from "../../src/infra/repositories/DriverRepositoryDatabase"
-import { PassengerRepositoryDatabase } from "../../src/infra/repositories/PassengerRepositoryDatabase"
+import { AccountGatewayHttp } from "../../src/infra/gateways/AccountGatewayHttp"
+import { AxiosAdapter } from "../../src/infra/http/AxiosAdapter"
 import { RideRepositoryDatabase } from "../../src/infra/repositories/RideRepositoryDatabase"
 
 it('should accept a ride', async () => {
@@ -15,8 +13,8 @@ it('should accept a ride', async () => {
     email: 'gabriel@hotmail.com'
   }
   const connection = new PgPromiseAdapter()
-  const createPassenger = new CreatePassenger(new PassengerRepositoryDatabase(connection))
-  const outputCreatePassenger = await createPassenger.execute(inputCreatePassenger)
+  const accountGateway = new AccountGatewayHttp(new AxiosAdapter())
+  const outputCreatePassenger = await accountGateway.createPassenger(inputCreatePassenger)
 
   const inputRequestRide = {
     passengerId: outputCreatePassenger.passengerId,
@@ -39,8 +37,7 @@ it('should accept a ride', async () => {
     email: 'gabriel@hotmail.com',
     carPlate: 'AAA9999'
   }
-  const createDriver = new CreateDriver(new DriverRepositoryDatabase(connection))
-  const outputCreateDriver = await createDriver.execute(inputCreateDriver)
+  const outputCreateDriver = await accountGateway.createDriver(inputCreateDriver)
 
   const inputAcceptRide = {
     rideId: outputRequestRide.rideId,
@@ -50,7 +47,7 @@ it('should accept a ride', async () => {
   const acceptRide = new AcceptRide(new RideRepositoryDatabase(connection))
   await acceptRide.execute(inputAcceptRide)
 
-  const getRide = new GetRide(new RideRepositoryDatabase(connection))
+  const getRide = new GetRide(new RideRepositoryDatabase(connection), accountGateway)
   const outputGetRide = await getRide.execute({ rideId: outputRequestRide.rideId })
   expect(outputGetRide.status).toBe('accepted')
   expect(outputGetRide.driverId).toBe(outputCreateDriver.driverId)

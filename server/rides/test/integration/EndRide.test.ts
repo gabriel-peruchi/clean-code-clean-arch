@@ -1,16 +1,14 @@
+import { AccountGateway } from './../../src/application/gateways/AccountGateway';
 import { AcceptRide } from "../../src/application/useCases/AcceptRide"
-import { CreateDriver } from "../../src/application/useCases/CreateDriver"
-import { CreatePassenger } from "../../src/application/useCases/CreatePassenger"
 import { EndRide } from "../../src/application/useCases/EndRide"
 import { GetRide } from "../../src/application/useCases/GetRide"
 import { RequestRide } from "../../src/application/useCases/RequestRide"
 import { StartRide } from "../../src/application/useCases/StartRide"
 import { PgPromiseAdapter } from "../../src/infra/database/PgPromiseAdapter"
-import { PaymentGatewayHtpp } from "../../src/infra/gateways/PaymentGatewayHttp"
 import { AxiosAdapter } from "../../src/infra/http/AxiosAdapter"
-import { DriverRepositoryDatabase } from "../../src/infra/repositories/DriverRepositoryDatabase"
-import { PassengerRepositoryDatabase } from "../../src/infra/repositories/PassengerRepositoryDatabase"
 import { RideRepositoryDatabase } from "../../src/infra/repositories/RideRepositoryDatabase"
+import { AccountGatewayHttp } from '../../src/infra/gateways/AccountGatewayHttp';
+import { PaymentGatewayHttp } from '../../src/infra/gateways/PaymentGatewayHttp';
 
 it('should end a ride', async () => {
   const inputCreatePassenger = {
@@ -19,8 +17,8 @@ it('should end a ride', async () => {
     email: 'gabriel@hotmail.com'
   }
   const connection = new PgPromiseAdapter()
-  const createPassenger = new CreatePassenger(new PassengerRepositoryDatabase(connection))
-  const outputCreatePassenger = await createPassenger.execute(inputCreatePassenger)
+  const accountGateway = new AccountGatewayHttp(new AxiosAdapter())
+  const outputCreatePassenger = await accountGateway.createPassenger(inputCreatePassenger)
 
   const inputRequestRide = {
     passengerId: outputCreatePassenger.passengerId,
@@ -43,8 +41,7 @@ it('should end a ride', async () => {
     email: 'gabriel@hotmail.com',
     carPlate: 'AAA9999'
   }
-  const createDriver = new CreateDriver(new DriverRepositoryDatabase(connection))
-  const outputCreateDriver = await createDriver.execute(inputCreateDriver)
+  const outputCreateDriver =  await accountGateway.createDriver(inputCreateDriver)
 
   const inputAcceptRide = {
     rideId: outputRequestRide.rideId,
@@ -65,10 +62,10 @@ it('should end a ride', async () => {
     rideId: outputRequestRide.rideId,
     date: new Date('2021-03-01T10:40:00')
   }
-  const endRide = new EndRide(new RideRepositoryDatabase(connection), new PassengerRepositoryDatabase(connection), new PaymentGatewayHtpp(new AxiosAdapter()))
+  const endRide = new EndRide(new RideRepositoryDatabase(connection), new PaymentGatewayHttp(new AxiosAdapter()), accountGateway)
   await endRide.execute(inputEndRide)
 
-  const getRide = new GetRide(new RideRepositoryDatabase(connection))
+  const getRide = new GetRide(new RideRepositoryDatabase(connection), accountGateway)
   const outputGetRide = await getRide.execute({ rideId: outputRequestRide.rideId })
   expect(outputGetRide.status).toBe('completed')
   expect(outputGetRide.endDate).toEqual(new Date('2021-03-01T10:40:00'))

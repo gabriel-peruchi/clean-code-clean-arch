@@ -1,7 +1,7 @@
 import { HttpClient } from "../http/HttpClient";
 import { Input, PaymentGateway } from "../../application/gateways/PaymentGateway";
 
-export class PaymentGatewayHtpp implements PaymentGateway {
+export class PaymentGatewayHttp implements PaymentGateway {
   constructor(readonly httpClient: HttpClient) {}
 
   async createTransaction(input: Input): Promise<void> {

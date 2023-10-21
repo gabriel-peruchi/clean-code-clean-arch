@@ -13,7 +13,7 @@ export class DriverGatewayHttp implements DriverGateway {
       carPlate: driver.carPlate.getValue(),
       document: driver.document.getValue(),
     }
-    const data = await this.httpClient.post('http://localhost:3333/drivers', input)
+    const data = await this.httpClient.post('http://localhost:3335/drivers', input)
     return data.driverId
   }
 }

@@ -1,3 +1,4 @@
+import { AccountGateway } from "../gateways/AccountGateway"
 import { RideRepository } from "../repositories/RideRepository"
 
 type GetRideInput = {
@@ -13,13 +14,23 @@ type GetRideOutput = {
   acceptDate?: Date
   startDate?: Date
   endDate?: Date
+  passengerName: string
+  driverName?: string
 }
 
 export class GetRide {
-  constructor(readonly rideRepository: RideRepository) { }
+  constructor(
+    readonly rideRepository: RideRepository,
+    readonly accountGateway: AccountGateway,
+  ) { }
 
   async execute({ rideId }: GetRideInput): Promise<GetRideOutput> {
     const ride = await this.rideRepository.findById(rideId)
+    const passenger = await this.accountGateway.getPassenger(ride.passengerId)
+    let driver = null
+    if (ride.driverId) {
+      driver = await this.accountGateway.getDriver(ride.driverId as string)
+    }
     return {
       id: ride.id,
       driverId: ride.driverId,
@@ -29,6 +40,8 @@ export class GetRide {
       acceptDate: ride.acceptDate,
       requestDate: ride.requestDate,
       endDate: ride.endDate,
+      passengerName: passenger.name,
+      driverName: driver?.name
     }
   }
 }
