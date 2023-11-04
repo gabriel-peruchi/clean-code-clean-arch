@@ -16,10 +16,10 @@ export class UseCaseFactory {
   }
 
   createCreatePassenger() {
-    return new CreatePassenger(this.repositoryFactory.createPassengerRepository())
+    return new CreatePassenger(this.repositoryFactory.createPassengerRepository(), this.repositoryFactory.createUserRepository())
   }
 
   createGetPassenger() {
-    return new GetPassenger(this.repositoryFactory.createPassengerRepository())
+    return new GetPassenger(this.repositoryFactory.createPassengerRepository(), this.repositoryFactory.createUserRepository())
   }
 }

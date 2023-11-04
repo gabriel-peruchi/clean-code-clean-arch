@@ -39,3 +39,11 @@ create table ccca.transactions (
   email text,
   amount numeric
 );
+
+create table ccca.users (
+  id uuid primary key,
+  email text,
+  password text,
+  password_type text,
+  salt text
+);
